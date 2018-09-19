@@ -17,8 +17,8 @@ class Property
   def save()
     db = PG.connect({ dbname: "property_tracker", host: "localhost"})
     sql = "INSERT INTO houses (address,value,bedrooms,build)
-           VALUES ($1,$2,$3,$4)
-           RETURNING *"
+    VALUES ($1,$2,$3,$4)
+    RETURNING *"
     values = [@address,@value,@bedrooms,@build]
     db.prepare("save",sql)
     @id = db.exec_prepared("save",values)[0]["id"].to_i
@@ -38,7 +38,7 @@ class Property
   def update()
     db = PG.connect({dbname: "property_tracker", host: "localhost"})
     sql = "UPDATE houses SET (address,value,bedrooms,build) = ($1,$2,$3,$4)
-           WHERE id = $5"
+    WHERE id = $5"
     values = [@address,@value,@bedrooms,@build,@id]
     db.prepare("update",sql)
     db.exec_prepared("update",values)
@@ -47,16 +47,18 @@ class Property
 
 
 
-    # class methods
+  # class methods
 
   def Property.find_by_id(id)
     db = PG.connect({dbname: "property_tracker", host: "localhost"})
     sql = "SELECT * FROM houses WHERE id = $1"
     values = [id]
     db.prepare("find_by_id",sql)
-    house = db.exec_prepared("find_by_id",values)
+    house_array = db.exec_prepared("find_by_id",values)
     db.close()
-    return house.map{|hash_house| Property.new(hash_house)}
+    house = house_array[0]
+    p house_array
+    return Property.new(house)
   end
 
 

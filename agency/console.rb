@@ -23,7 +23,7 @@ house2.save()
 house1.bedrooms = 3
 house1.update()
 
-found1 = Property.find_by_id(20)
+found1 = Property.find_by_id(house1.id)
 found2 = Property.find_by_address("3/2 291 Dumbarton Road Glasgow")
 
 all_houses = Property.all()
